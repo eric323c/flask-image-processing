@@ -12,23 +12,29 @@ cloudinary.config(
     api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
 
-# Root route
 @app.route('/')
 def home():
+    print("Home route accessed")
     return "Flask is running! Your image processing API is ready."
 
-# Image processing route (example route, you can extend this)
 @app.route('/process_image', methods=['POST'])
 def process_image_request():
-    data = request.json
-    image_url = data.get('image_url')
-    action = data.get('action')
+    try:
+        print("Processing image...")
+        data = request.json
+        image_url = data.get('image_url')
+        action = data.get('action')
+        print(f"Received image URL: {image_url}, Action: {action}")
 
-    # Simple response for now, replace with your logic
-    return jsonify({
-        'status': 'success',
-        'message': f'Processing {action} for image {image_url}'
-    })
+        # Add more logic here and return response
+        return jsonify({
+            'status': 'success',
+            'message': f'Processing {action} for image {image_url}'
+        })
+    except Exception as e:
+        print(f"Error processing request: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
